@@ -1,4 +1,4 @@
-import {Button, FormControl, InputLabel, Select, TextField} from '@material-ui/core';
+import {Button, InputLabel, Select, TextField} from '@material-ui/core';
 import {useState} from 'react';
 
 export const Form = () => {
