@@ -1,30 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="Project Files" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="43bb48fc-7328-4366-bd5f-dfda25daee80" name="Changes" comment="Start course TDD">
-      <changelist_data name="M. David Ramiro" email="" />
-      <change afterPath="$PROJECT_DIR$/store-app/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/.idea/my-react-tdd.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/logo192.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/logo512.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/manifest.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/public/robots.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/App.test.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/App.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/form/Form.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/form/Form.test.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/react-app-env.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/src/setupTests.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store-app/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,11 +42,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/store-app" />
     <property name="nodejs.jest.jest_package" value="$PROJECT_DIR$/store-app/node_modules/react-scripts" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="editing.templates" />
-    <property name="ts.external.directory.path" value="C:\Dev\react\Udemy\my-react-tdd\store-app\node_modules\typescript\lib" />
+    <property name="ts.external.directory.path" value="C:\Users\drami\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\213.6461.79\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RunManager">
     <configuration name="All Tests" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
@@ -87,7 +70,18 @@
       <option name="presentableId" value="Default" />
       <updated>1642531087189</updated>
       <workItem from="1642531089124" duration="5033000" />
+      <workItem from="1642536172039" duration="205000" />
+      <workItem from="1642536387239" duration="42000" />
+      <workItem from="1642536549353" duration="190000" />
     </task>
+    <task id="LOCAL-00001" summary="Start course TDD">
+      <created>1642536195311</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1642536195311</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
