@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="43bb48fc-7328-4366-bd5f-dfda25daee80" name="Changes" comment="Start course TDD">
+      <changelist_data name="M. David Ramiro" email="" />
+      <change afterPath="$PROJECT_DIR$/store-app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/.idea/my-react-tdd.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/logo192.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/logo512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/public/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/App.test.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/form/Form.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/form/Form.test.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/react-app-env.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/src/setupTests.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/store-app/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="M. David Ramiro" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="23smHx1XOAeBzNZ317rdd1G3KxB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs.jest.jest_package" value="$PROJECT_DIR$/store-app/node_modules/react-scripts" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="ts.external.directory.path" value="C:\Dev\react\Udemy\my-react-tdd\store-app\node_modules\typescript\lib" />
+  </component>
+  <component name="RunManager">
+    <configuration name="All Tests" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/store-app/node_modules/react-scripts" />
+      <working-dir value="$PROJECT_DIR$/store-app" />
+      <jest-options value="--watchAll" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="43bb48fc-7328-4366-bd5f-dfda25daee80" name="Changes" comment="" />
+      <created>1642531087189</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1642531087189</updated>
+      <workItem from="1642531089124" duration="5033000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Start course TDD" />
+    <option name="LAST_COMMIT_MESSAGE" value="Start course TDD" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/my_react_tdd$Rerun_Failed_Tests.info" NAME="Rerun Failed Tests Coverage Results" MODIFIED="1642531758441" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/my_react_tdd$when_the_component_is_mounted.info" NAME="when the component is mounted Coverage Results" MODIFIED="1642531713236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="JestJavaScriptTestRunnerCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
