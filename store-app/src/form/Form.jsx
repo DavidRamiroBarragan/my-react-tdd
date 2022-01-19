@@ -17,12 +17,17 @@ export const Form = () => {
             setFormErrors((prev) => ({...prev, type: 'The type is required'}));
         }
     };
+
+    const handleBlur = (event) => {
+        const {name, value} = event.target;
+        setFormErrors({...formErrors, [name]: value.length ? '' : `The ${name} is required`})
+    }
     return (
         <>
             <h1>Create product</h1>
             <form onSubmit={handleSubmit}>
-                <TextField label={'name'} id="name" helperText={formErrors.name}/>
-                <TextField label={'size'} id="size" helperText={formErrors.size}/>
+                <TextField label={'name'} id="name" helperText={formErrors.name} onBlur={handleBlur} name="name"/>
+                <TextField label={'size'} id="size" helperText={formErrors.size} name="size" onBlur={handleBlur}/>
                     <InputLabel variant="standard" htmlFor="type">
                         Type
                     </InputLabel>
@@ -33,6 +38,7 @@ export const Form = () => {
                             name: 'type',
                             id: 'type',
                         }}
+                        onBlur={handleBlur}
 
                     >
                         <option aria-label="None" value="" />
