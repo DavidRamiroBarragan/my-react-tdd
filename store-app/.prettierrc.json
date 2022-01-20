@@ -10,5 +10,10 @@
         "semi": true
       }
     }
-  ]
+  ],
+  "printWidth": 120,
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false
 }
