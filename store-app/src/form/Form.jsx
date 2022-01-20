@@ -1,5 +1,7 @@
 import { Button, InputLabel, Select, TextField } from '@material-ui/core'
 import { useState } from 'react'
+import { saveProducts } from '../services/productServices'
+import HTTP_STATUS from '../consts/httpStatus'
 
 export const Form = () => {
   const [formErrors, setFormErrors] = useState({
@@ -7,31 +9,48 @@ export const Form = () => {
     size: '',
     type: '',
   })
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const { name, size, type } = event.target.elements
+  const [isSaving, setIsSaving]     = useState(false)
+  const [isSuccess, setIsSuccess]   = useState(false)
 
-    if (!name.value) {
-      setFormErrors((prev) => ({ ...prev, name: 'The name is required' }))
-    }
-    if (!size.value) {
-      setFormErrors((prev) => ({ ...prev, size: 'The size is required' }))
-    }
-    if (!type.value) {
-      setFormErrors((prev) => ({ ...prev, type: 'The type is required' }))
-    }
-  }
-
-  const handleBlur = (event) => {
-    const { name, value } = event.target
+  const validateField = (name, value) => {
     setFormErrors({
       ...formErrors,
       [name]: value.length ? '' : `The ${name} is required`,
     })
   }
+
+  const validateForm = ({ name, size, type }) => {
+    validateField('name', name)
+    validateField('size', size)
+    validateField('type', type)
+  }
+
+  const getFormValues = ({name, size, type}) => ({ name: name.value, size: size.value, type: type.value })
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    setIsSaving(true)
+    const { name, size, type } = event.target.elements
+
+    validateForm(getFormValues({name, size, type}))
+
+    const response = await saveProducts(getFormValues({name, size, type}))
+
+    if (response.status === HTTP_STATUS.CREATED_STATUS) {
+      setIsSuccess(true)
+    }
+    setIsSaving(false)
+  }
+
+  const handleBlur = (event) => {
+    const { name, value } = event.target
+    validateField(name, value)
+  }
   return (
     <>
       <h1>Create product</h1>
+      {isSuccess && <p>Product Stored</p>}
       <form onSubmit={handleSubmit}>
         <TextField
           label="name"
@@ -52,7 +71,6 @@ export const Form = () => {
         </InputLabel>
         <Select
           native
-          value=""
           inputProps={{
             name: 'type',
             id: 'type',
@@ -65,7 +83,7 @@ export const Form = () => {
           <option value="clothing">Clothing</option>
         </Select>
         {formErrors.type.length && <p>{formErrors.type}</p>}
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isSaving}>Submit</Button>
       </form>
     </>
   )
