@@ -2,7 +2,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { Form } from './Form'
-import HTTP_STATUS from '../consts/httpStatus'
+import HTTP_STATUS, { INVALID_REQUEST_STATUS } from '../consts/httpStatus'
+
+let nameInput
+let typeSelect
+let sizeInput
+let submitButton
 
 const server = setupServer(
   rest.post('/products', (request, response, ctx) => {
@@ -28,6 +33,10 @@ afterAll(() => {server.close()})
 // Mount the component before throw each test.
 beforeEach(() => {
   render(<Form/>)
+  nameInput    = screen.getByLabelText(/name/i)
+  typeSelect   = screen.getByLabelText(/type/i)
+  sizeInput    = screen.getByLabelText(/size/i)
+  submitButton = screen.getByRole('button', { name: /submit/i })
 })
 
 describe('when the component is mounted', () => {
@@ -37,9 +46,9 @@ describe('when the component is mounted', () => {
     ).toBeInTheDocument()
   })
   it('should exist the fields: name, size, type (electronic, furniture, clothing)', function () {
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/size/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/type/i)).toBeInTheDocument()
+    expect(nameInput).toBeInTheDocument()
+    expect(sizeInput).toBeInTheDocument()
+    expect(typeSelect).toBeInTheDocument()
     expect(screen.queryByText(/electronic/i)).toBeInTheDocument()
   })
   it('should exists the submit button', () => {
@@ -65,7 +74,7 @@ describe("when the user blurs an empty field", () => {
   it('should display validation message for the input name', () => {
     expect(screen.queryByText(/The name is required/i)).not.toBeInTheDocument()
 
-    fireEvent.blur(screen.getByLabelText(/name/i), {
+    fireEvent.blur(nameInput, {
       target: { name: 'name', value: '' },
     })
 
@@ -75,7 +84,7 @@ describe("when the user blurs an empty field", () => {
   it('should display validation message for the input size', () => {
     expect(screen.queryByText(/The size is required/i)).not.toBeInTheDocument()
 
-    fireEvent.blur(screen.getByLabelText(/size/i), {
+    fireEvent.blur(sizeInput, {
       target: { name: 'size', value: '' },
     })
 
@@ -85,7 +94,7 @@ describe("when the user blurs an empty field", () => {
   it('should display validation message for the input type', () => {
     expect(screen.queryByText(/The type is required/i)).not.toBeInTheDocument()
 
-    fireEvent.blur(screen.getByLabelText(/type/i), {
+    fireEvent.blur(typeSelect, {
       target: { name: 'type', value: '' },
     })
 
@@ -93,9 +102,8 @@ describe("when the user blurs an empty field", () => {
   })
 });
 
-describe('when the user sybmits the form', () => {
+describe('when the user submits the form properly and the server returns created status', () => {
   it('should the Button by disabled until the request is done', async () => {
-    const submitButton = screen.getByRole('button', { name: /submit/i })
 
     fireEvent.click(submitButton)
 
@@ -105,23 +113,22 @@ describe('when the user sybmits the form', () => {
   })
 
   it('the form page must display the success message “Product stored” and clean the fields values', async () => {
-    const submitButton = screen.getByRole('button', { name: /submit/i })
 
-    fireEvent.change(screen.getByLabelText(/name/i), {
+    fireEvent.change(nameInput, {
       target: {
         name: 'name',
         value: 'My product',
       },
     })
 
-    fireEvent.change(screen.getByLabelText(/size/i), {
+    fireEvent.change(sizeInput, {
       target: {
         name: 'size',
         value: '10',
       },
     })
 
-    fireEvent.change(screen.getByLabelText(/type/i), {
+    fireEvent.change(typeSelect, {
       target: {
         name: 'type',
         value: 'electronic',
@@ -133,5 +140,45 @@ describe('when the user sybmits the form', () => {
 
     await waitFor(() => expect(screen.queryByText(/product stored/i)).toBeInTheDocument())
 
+    expect(nameInput).toHaveValue('')
+    expect(sizeInput).toHaveValue('')
+    expect(typeSelect).toHaveValue('')
+
+  })
+})
+
+describe('when submit the form and the server return and unexpected messages', () => {
+  it('the form page must display the error message "Unexpected error, please try again"', async () => {
+    fireEvent.click(submitButton)
+    await waitFor(() => expect(screen.getByText(/unexpected error, please try again/i)).toBeInTheDocument())
+  })
+})
+
+describe('when te user submits the form and the server returns and invalid request error', () => {
+  it('the form page must display the error message "The form is invalid, the fields [field1...fieldN]"', async () => {
+    server.use(
+      rest.post('/products', (req, resp, ct) => {
+        return resp(
+          ct.status(INVALID_REQUEST_STATUS),
+          ct.json({ message: 'The form is invalid, the fields name, size, type are required' }),
+        )
+      })
+    )
+
+    fireEvent.click(submitButton)
+    await waitFor(() => expect(screen.getByText(/the form is invalid, the fields name, size, type are required/i))
+      .toBeInTheDocument())
+  })
+})
+
+describe('when te user submits the form and the server returns and invalid request error', () => {
+  it('the form page must display the error message "Connection error, please try again"', async () => {
+    server.use(
+      rest.post('/products', (req, resp) => resp.networkError("Failed to connect to server"))
+    )
+
+    fireEvent.click(submitButton)
+    await waitFor(() => expect(screen.getByText(/connection error, please try again/i))
+      .toBeInTheDocument())
   })
 })
