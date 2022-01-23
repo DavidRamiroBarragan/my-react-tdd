@@ -1,7 +1,8 @@
+import GitHubSearchPage from './components/github-serach-page';
 
 function App() {
   return (
-    <div/>
+    <GitHubSearchPage/>
   );
 }
 
