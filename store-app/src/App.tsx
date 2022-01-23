@@ -1,9 +1,9 @@
-import {Form} from './form/Form';
+import {Formulario} from './form/Formulario';
 
 
 function App() {
   return (
-    <Form/>
+    <Formulario/>
   );
 }
 

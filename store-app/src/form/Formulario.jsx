@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
-export const Form = () => {
+export const Formulario = () => {
   const [formErrors, setFormErrors]       = useState({
     name: '',
     size: '',
@@ -54,27 +54,19 @@ export const Form = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
-
     setIsSaving(true)
     const { name, size, type } = event.target.elements
-
     validateForm(getFormValues({ name, size, type }))
     try {
       const response = await saveProducts(getFormValues({ name, size, type }))
-
       sendError(response)
-
       if (response.status === HTTP_STATUS.CREATED_STATUS) {
         event.target.reset()
         setIsSuccess(true)
       }
-
     } catch (e) {
-
       await handleFetchErrors(e)
     }
-
     setIsSaving(false)
   }
 

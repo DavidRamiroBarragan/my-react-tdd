@@ -6,7 +6,7 @@ import {useState} from 'react';
 
 export const GitHubSearchPage = () => {
     const [isSearching, setIsSearching] = useState(false);
-    const[isSearchApplied, setIsSearchApplied] = useState(false)
+    const [isSearchApplied, setIsSearchApplied] = useState(false)
 
     const handleSearch = async () => {
         setIsSearching(() => true);

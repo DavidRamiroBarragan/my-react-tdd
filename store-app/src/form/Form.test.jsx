@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-import { Form } from './Form'
+import { Formulario } from './Formulario'
 import HTTP_STATUS, { INVALID_REQUEST_STATUS } from '../consts/httpStatus'
 
 let nameInput
@@ -32,7 +32,7 @@ afterAll(() => {server.close()})
 
 // Mount the component before throw each test.
 beforeEach(() => {
-  render(<Form/>)
+  render(<Formulario/>)
   nameInput    = screen.getByLabelText(/name/i)
   typeSelect   = screen.getByLabelText(/type/i)
   sizeInput    = screen.getByLabelText(/size/i)
