@@ -83,7 +83,7 @@ describe('when the developers does a search', () => {
     expect(forks).toHaveTextContent(/5/i)
     expect(openIssues).toHaveTextContent(/2/i)
     expect(updatedAt).toHaveTextContent(/20-01-01/i)
-    expect(within(tableCells[0]).getByText(/test/i).closest('a')).toHaveAttribute('href', 'http://localhost:3000')
+    expect(within(repository).getByText(/test/i).closest('a')).toHaveAttribute('href', 'http://localhost:3000')
 
   })
 })
