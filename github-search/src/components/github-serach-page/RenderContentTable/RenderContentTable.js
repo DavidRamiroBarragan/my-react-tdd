@@ -1,20 +1,31 @@
-import { Avatar, Box, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  Link,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead, TablePagination,
+  TableRow
+} from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 
 export const RenderContentTable = ({ isSearchApplied }) => {
   return (
-    isSearchApplied ? (<TableContainer>
+    isSearchApplied ? (<Paper sx={{ width: '100%', overflow: 'hidden' }}><TableContainer>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>
                 Repository
               </TableCell>
-              <TableCell>stars</TableCell>
-              <TableCell>forks</TableCell>
-              <TableCell>open issues</TableCell>
-              <TableCell>updated at</TableCell>
+              <TableCell>Stars</TableCell>
+              <TableCell>Forks</TableCell>
+              <TableCell>Open issues</TableCell>
+              <TableCell>Updated at</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -27,7 +38,16 @@ export const RenderContentTable = ({ isSearchApplied }) => {
               <TableCell>20-01-01</TableCell>
             </TableRow>
           </TableBody>
-        </Table></TableContainer>)
+        </Table></TableContainer>
+          <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={100}
+              rowsPerPage={10}
+              page={0}
+              onPageChange={()=>{}}
+              onRowsPerPageChange={()=>{}}
+          /></Paper>)
       :
       (<Box display="flex" alignItems={'center'} justifyContent="center" height={400}>
         <Typography>Please provide a search option and click in the search button</Typography>
