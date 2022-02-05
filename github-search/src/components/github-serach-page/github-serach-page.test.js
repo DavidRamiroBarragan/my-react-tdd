@@ -92,4 +92,27 @@ describe('when the developers does a search', () => {
      await screen.findByRole('table');
     expect(screen.getByText(/1-10 of 100/i)).toBeInTheDocument()
   })
+
+  it("results size per page select/combobox with the options: 30,50,100. The default is 30", async() => {
+    fireClickSearch()
+    await screen.findByRole('table');
+    expect(screen.getByLabelText(/rows per page/i)).toBeInTheDocument()
+
+    fireEvent.mouseDown(screen.getByLabelText(/rows per page/i))
+
+    const listbox = screen.getByRole('listbox', {name :/rows per page/i});
+
+    const options = within(listbox).getAllByRole('option')
+
+    const [items_30, items_50, items_100] = options;
+    expect(items_30).toHaveTextContent(/30/)
+    expect(items_50).toHaveTextContent(/50/)
+    expect(items_100).toHaveTextContent(/100/)
+  })
+  it("must display a nex button and a previous button",async () => {
+    fireClickSearch()
+    await screen.findByRole('table')
+    expect(screen.getByRole('button', {name: /previous page/i})).toBeDisabled()
+    expect(screen.getByRole('button', {name: /next page/i})).not.toBeDisabled()
+  })
 })
