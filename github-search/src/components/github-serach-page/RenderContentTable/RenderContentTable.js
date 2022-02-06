@@ -7,7 +7,8 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead, TablePagination,
+    TableHead,
+    TablePagination,
     TableRow
 } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
