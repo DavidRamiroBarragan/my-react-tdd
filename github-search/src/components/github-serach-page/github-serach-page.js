@@ -6,12 +6,15 @@ import { useState } from 'react'
 import RenderContentTable from './RenderContentTable'
 
 export const GitHubSearchPage = () => {
-  const [isSearching, setIsSearching]         = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
   const [isSearchApplied, setIsSearchApplied] = useState(false)
+  const [reposList, setReposList] = useState([])
 
   const handleSearch = async () => {
     setIsSearching(() => true)
-    await Promise.resolve()
+    const response = await fetch('/search/repositories?q=react+language:phython&page=2&per_page=50')
+    const data = await response.json()
+    setReposList(data.items)
     setIsSearchApplied(true)
     setIsSearching(() => false)
   }
@@ -30,7 +33,7 @@ export const GitHubSearchPage = () => {
       </Grid>
     </Grid>
     <Box my={4}>
-      <RenderContentTable isSearchApplied={isSearchApplied}/>
+      <RenderContentTable isSearchApplied={isSearchApplied} items={reposList}/>
     </Box>
   </Container>)
 }

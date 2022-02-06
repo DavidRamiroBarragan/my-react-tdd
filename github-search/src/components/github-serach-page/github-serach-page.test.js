@@ -1,30 +1,23 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
+
+import { OK_STATUS } from '../../consts'
+import { makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
+
 import { GitHubSearchPage } from './github-serach-page'
 
 let searchButton
-const fakeRepo = {
-  id: '56757919',
-  name: 'dejango-rest-framewort-reactive',
-  owner: {
-    'avatar_url': 'https://avatars.githubusercontent.com/u/773036?v=4',
-  },
-  'html_url': 'https://github.com/kriasoft/react-starter-kit',
-  'updated_at': '2022-02-06T10:21:59Z',
-  'stargazers_count': 21100,
-  'forks_count': 4106,
-  'open_issues_count': 7,
-}
-const server = setupServer(rest.post('/seach/repositories', (requ, res, ctx) => {
-  return res(
-    ctx.status(200),
-    ctx.json({
-      'total_count': 8643,
-      'incomplete_results': false,
-      items: [fakeRepo]
-    }))
-}))
+const fakeResponse = makeFakeResponse({ totalCount: 8643 })
+const fakeRepo = makeFakeRepo()
+fakeResponse.items = [fakeRepo]
+
+const server = setupServer(
+  rest.get('/search/repositories', (req, res, ctx) => {
+    return res(
+      ctx.status(OK_STATUS),
+      ctx.json(fakeResponse))
+  }))
 
 beforeEach(() => {
   // eslint-disable-next-line testing-library/no-render-in-setup
@@ -32,17 +25,15 @@ beforeEach(() => {
   searchButton = screen.getByRole('button', { name: /search/i })
 })
 // Enable API mocking before tests
-beforeAll(() => {
-  server.listen()
-})
+beforeAll(() => server.listen())
 
 // Reset any runtime request handlers we may add during the tests.
-afterEach(() => {
-  server.resetHandlers()
-})
+afterEach(() => server.resetHandlers())
 
 // Disable API mocking after the tests are done.
 afterAll(() => server.close())
+
+const fireClickSearch = () => fireEvent.click(searchButton)
 
 describe('whn the GithubSearchPage is mounted', function () {
   it('should display the title', function () {
@@ -64,7 +55,6 @@ describe('whn the GithubSearchPage is mounted', function () {
 })
 
 describe('when the developers does a search', () => {
-  const fireClickSearch = () => fireEvent.click(searchButton)
   it('the search button should be disabled until the search is done', async () => {
     expect(searchButton).not.toBeDisabled()
 
@@ -95,7 +85,6 @@ describe('when the developers does a search', () => {
     const withTable = within(table)
     const tableHeaders = withTable.getAllByRole('columnheader')
 
-    expect(withTable.getByRole('img', { name: /test/i })).toBeInTheDocument()
     const [repository, stars, forks, openIssues, updatedAt] = tableHeaders
 
     expect(tableHeaders).toHaveLength(5)
@@ -104,7 +93,6 @@ describe('when the developers does a search', () => {
     expect(forks).toHaveTextContent(/forks/i)
     expect(openIssues).toHaveTextContent(/open issues/i)
     expect(updatedAt).toHaveTextContent(/updated at/i)
-    expect(withTable.getByText(/test/i).closest('a')).toHaveAttribute('href', 'http://localhost:3000')
   })
 
   it('each table result must contain: owner avatar image, stars, updated at, forks, open issues', async () => {
@@ -115,19 +103,23 @@ describe('when the developers does a search', () => {
     const tableCells = withTable.getAllByRole('cell')
     const [repository, stars, forks, openIssues, updatedAt] = tableCells
 
-    expect(repository).toHaveTextContent(/test/i)
-    expect(stars).toHaveTextContent(/10/i)
-    expect(forks).toHaveTextContent(/5/i)
-    expect(openIssues).toHaveTextContent(/2/i)
-    expect(updatedAt).toHaveTextContent(/20-01-01/i)
-    expect(within(repository).getByText(/test/i).closest('a')).toHaveAttribute('href', 'http://localhost:3000')
+    const avatarImg = within(repository).getByRole('img', { name: fakeRepo.name })
+    expect(avatarImg).toBeInTheDocument()
+
+    expect(repository).toHaveTextContent(fakeRepo.name)
+    expect(stars).toHaveTextContent(fakeRepo.stargazers_count)
+    expect(forks).toHaveTextContent(fakeRepo.forks_count)
+    expect(openIssues).toHaveTextContent(fakeRepo.open_issues_count)
+    expect(updatedAt).toHaveTextContent(fakeRepo.updated_at)
+    expect(within(repository).getByText(fakeRepo.name).closest('a')).toHaveAttribute('href', fakeRepo.html_url)
+    expect(avatarImg).toHaveAttribute('src', fakeRepo.owner.avatar_url)
 
   })
 
   it('must display the total results number of the search and the current number of results', async () => {
     fireClickSearch()
     await screen.findByRole('table')
-    expect(screen.getByText(/1-10 of 100/i)).toBeInTheDocument()
+    expect(screen.getByText(/1-30 of 100/i)).toBeInTheDocument()
   })
 
   it('results size per page select/combobox with the options: 30,50,100. The default is 30', async () => {
@@ -154,8 +146,22 @@ describe('when the developers does a search', () => {
   })
 })
 
-describe('when the developer does a searc whithout results', () => {
-  it.todo('must show a empty state message', () => {
+describe('when the developer does a search whithout results', () => {
+  it('must show a empty state message "Your search has no results"', async () => {
+    server.use(
+      rest.get('/search/repositories', (req, res, ctx) =>
+        res(ctx.status(OK_STATUS), ctx.json(makeFakeResponse({}))),
+      ),
+    )
 
+    fireClickSearch()
+
+    await waitFor(() =>
+      expect(
+        screen.getByText(/your search has no results/i),
+      ).toBeInTheDocument(),
+    )
+
+    expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
 })
