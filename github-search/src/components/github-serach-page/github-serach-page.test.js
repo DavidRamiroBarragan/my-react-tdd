@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
+import { getReposListBy, getReposPerPage, makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
 
 import { OK_STATUS } from '../../consts'
-import { makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
 
 import { GitHubSearchPage } from './github-serach-page'
 
@@ -146,11 +146,11 @@ describe('when the developers does a search', () => {
   })
 })
 
-describe('when the developer does a search whithout results', () => {
+describe('when the developer does a search without results', () => {
   it('must show a empty state message "Your search has no results"', async () => {
     server.use(
       rest.get('/search/repositories', (req, res, ctx) =>
-        res(ctx.status(OK_STATUS), ctx.json(makeFakeResponse({}))),
+        res(ctx.status(OK_STATUS), ctx.json(makeFakeResponse())),
       ),
     )
 
@@ -163,5 +163,71 @@ describe('when the developer does a search whithout results', () => {
     )
 
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
+  })
+})
+
+describe('when the developer types on filter by and does a search', () => {
+  it('must display the related repos', async () => {
+    const internalFakeResponse = makeFakeResponse()
+    const REPO_NAME = 'laravel'
+
+    const expectedRepo = getReposListBy({ name: REPO_NAME })[0]
+
+    server.use(
+      rest.get('/search/repositories', (req, res, ctx) =>
+        res(
+          ctx.status(OK_STATUS),
+          ctx.json({
+            ...internalFakeResponse,
+            items: getReposListBy({ name: req.url.searchParams.get('q') }),
+          }),
+        ),
+      ),
+    )
+
+    fireEvent.change(screen.getByLabelText(/filter by/i), {
+      target: { value: REPO_NAME },
+    })
+
+    fireClickSearch()
+
+    const table = await screen.findByRole('table')
+
+    expect(table).toBeInTheDocument()
+
+    const withinTable = within(table)
+
+    const tableCells = withinTable.getAllByRole('cell')
+
+    const [repository] = tableCells
+
+    expect(repository).toHaveTextContent(expectedRepo.name)
+  })
+})
+
+describe('when the developer does a search ans selects 50 row per page', () => {
+  test('must fetch a new search and display 50 resuls on the table', async () => {
+    server.use(
+      rest.get('/search/repositories', (req, res, ctx) =>
+        res(
+          ctx.status(OK_STATUS),
+          ctx.json({
+            ...makeFakeResponse(),
+            items: getReposPerPage({
+              perPage: Number(req.url.searchParams.get('per_page')),
+              currentPage: Number(req.url.searchParams.get('page'))
+            }),
+          }),
+        ),
+      ),
+    )
+
+    expect(await screen.findByRole('table')).toBeInTheDocument()
+    expect(await screen.findAllByRole('row')).toHaveLength(31)
+
+    fireEvent.mouseDown(screen.getByLabelText(/rows per page/i))
+    fireEvent.click(screen.getByRole('option'),{name: '50'})
+    expect(await screen.findAllByRole('row')).toHaveLength(51)
+
   })
 })

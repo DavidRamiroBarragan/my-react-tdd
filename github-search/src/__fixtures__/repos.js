@@ -1,11 +1,17 @@
-export const makeFakeResponse = (totalCount = 0) => ({
+import repos30Pagination from '../__fixtures__/repos-30-paginated.json'
+import repos50paginated from '../__fixtures__/repos-50-paginated.json'
+
+export const makeFakeResponse = ({ totalCount = 0 } = {}) => ({
   total_count: totalCount,
   items: []
 })
 
-export const makeFakeRepo = () => ({
-  id: '56757919',
-  name: 'dejango-rest-framewort-reactive',
+export const makeFakeRepo = ({
+  id = '56757919',
+  name = 'dejango-rest-framewort-reactive'
+} = {}) => ({
+  id,
+  name,
   owner: {
     avatar_url: 'https://avatars.githubusercontent.com/u/773036?v=4',
   },
@@ -16,7 +22,18 @@ export const makeFakeRepo = () => ({
   open_issues_count: 7,
 })
 
+const reposData = ['go', 'freeCOdeCamp', 'laravel', 'python', 'javascript',]
+
+const reposList = reposData.map(name => makeFakeRepo({ name, id: name }))
+
+export const getReposListBy = ({ name }) => reposList.filter(repo => repo === name)
+export const getReposPerPage = ({
+  currentPage,
+  perPage
+}) => perPage === 30 ? repos30Pagination[currentPage] : repos50paginated[currentPage]
 export default ({
   makeFakeResponse,
-  makeFakeRepo
+  makeFakeRepo,
+  getReposListBy,
+  getReposPerPage
 })
