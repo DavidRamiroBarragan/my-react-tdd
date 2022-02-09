@@ -1,12 +1,29 @@
-import { Avatar, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import {
+  Avatar,
+  Link,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@material-ui/core'
 import PropTypes from 'prop-types'
 
 const tableTitles = ['Repository', 'Stars', 'Forks', 'Open Issues', 'Updated at']
 
+const useStyles = makeStyles({
+  container:{
+    maxHeight: 400
+  }
+})
+
 export const GitHubTable = ({items}) => {
+  const classes = useStyles()
   return(
-    <TableContainer>
-      <Table>
+    <TableContainer className={classes.container}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             {tableTitles.map(title =><TableCell key={title}>{title}</TableCell>)}

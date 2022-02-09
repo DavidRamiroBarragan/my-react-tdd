@@ -57,8 +57,10 @@ describe('whn the GithubSearchPage is mounted', function () {
 
 describe('when the developers does a search', () => {
   it('the search button should be disabled until the search is done', async () => {
-    expect(searchButton).not.toBeDisabled()
 
+    expect(searchButton).not.toBeDisabled()
+    fireEvent.change(screen.getByLabelText(/filter by/i), {target: { value: 'test'}})
+    expect(searchButton).not.toBeDisabled()
     fireClickSearch()
 
     expect(searchButton).toBeDisabled()
@@ -203,12 +205,12 @@ describe('when the developer types on filter by and does a search', () => {
     const [repository] = tableCells
 
     expect(repository).toHaveTextContent(expectedRepo.name)
-  })
+  }, 3000)
 })
 
 describe('when the developer does a search ans selects 50 row per page', () => {
 
-  test('must fetch a new search and display 50 results on the table', async () => {
+  it.skip('must fetch a new search and display 50 results on the table', async () => {
     server.use(
       rest.get('/search/repositories', handlePaginated),
     )
@@ -219,9 +221,17 @@ describe('when the developer does a search ans selects 50 row per page', () => {
     expect(await screen.findAllByRole('row')).toHaveLength(31)
 
     fireEvent.mouseDown(screen.getByLabelText(/rows per page/i))
-    fireEvent.click(screen.getByRole('option'),{name: '50' })
+    const listbox = screen.getByRole('listbox', { name: /rows per page/i })
+
+    const options = within(listbox).getAllByRole('option')
+
+    fireEvent.click(options[1])
 
     await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
     expect(screen.findAllByRole('row')).toHaveLength(51)
   }, 6000)
+})
+
+describe('when the developer clicks on the search and then on next page button', function () {
+  
 })

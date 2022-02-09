@@ -12,31 +12,32 @@ export const GitHubSearchPage = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [isSearchApplied, setIsSearchApplied] = useState(false)
   const [reposList, setReposList] = useState([])
-  const [searchBy, setSearchBy] = useState('')
+  // const [searchBy, setSearchBy] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(INITIAL_ROWS_DEFAULT)
+
   const didMount = useRef(false)
+  const searchByInput = useRef(null)
 
   const handleSearch = useCallback(async () => {
     setIsSearching(() => true)
-    const response = await getRepos({ q: searchBy, rowsPerPage })
+    const response = await getRepos({ q: searchByInput.current.value, rowsPerPage })
     const data = await response.json()
     setReposList(data.items)
     setIsSearchApplied(true)
     setIsSearching(false)
-  },[rowsPerPage, searchBy])
+  }, [rowsPerPage])
 
-  const handleChange = ({ target: { value } }) => setSearchBy(value)
   const handleRowChangePerPage = (event) => {
     setRowsPerPage(+event.target.value)
   }
 
-  useEffect(()=> {
-    if(!didMount.current){
+  useEffect(() => {
+    if (!didMount.current) {
       didMount.current = true
       return
     }
     handleSearch()
-  },[rowsPerPage, handleSearch])
+  }, [rowsPerPage, handleSearch])
 
   return (<Container>
     <Box my={2}>
@@ -44,7 +45,7 @@ export const GitHubSearchPage = () => {
     </Box>
     <Grid container spacing={2} justifyContent="space-between">
       <Grid item md={6} xs={12}>
-        <TextField fullWidth label="Filter by" id="filterBy" value={searchBy} onChange={handleChange}/>
+        <TextField fullWidth label="Filter by" id="filterBy" inputRef={searchByInput} />
       </Grid>
       <Grid item md={3} xs={12}>
         <Button fullWidth variant="contained" color="primary" onClick={handleSearch}
@@ -58,15 +59,15 @@ export const GitHubSearchPage = () => {
       >
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
           <GitHubTable items={reposList}/>
-            <TablePagination
-              rowsPerPageOptions={[30, 50, 100]}
-              component="div"
-              count={100}
-              rowsPerPage={rowsPerPage}
-              page={0}
-              onPageChange={()=>{}}
-              onRowsPerPageChange={handleRowChangePerPage}
-            />
+          <TablePagination
+            rowsPerPageOptions={[30, 50, 100]}
+            component="div"
+            count={100}
+            rowsPerPage={rowsPerPage}
+            page={0}
+            onPageChange={() => {}}
+            onRowsPerPageChange={handleRowChangePerPage}
+          />
         </Paper>
       </RenderContentTable>
     </Box>

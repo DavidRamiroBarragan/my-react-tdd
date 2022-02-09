@@ -22,11 +22,11 @@ export const makeFakeRepo = ({
   open_issues_count: 7,
 })
 
-const reposData = ['go', 'freeCOdeCamp', 'laravel', 'python', 'javascript',]
+const reposData = ['go', 'freeCodeCamp', 'laravel', 'python', 'javascript',]
 
 const reposList = reposData.map(name => makeFakeRepo({ name, id: name }))
 
-export const getReposListBy = ({ name }) => reposList.filter(repo => repo === name)
+export const getReposListBy = ({ name }) => reposList.filter(repo => repo.name === name)
 export const getReposPerPage = ({
   currentPage,
   perPage
