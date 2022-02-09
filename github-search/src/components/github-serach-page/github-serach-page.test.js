@@ -1,7 +1,8 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-import { getReposListBy, getReposPerPage, makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
+import { handlePaginated } from '../../__fixtures__/handlers'
+import { getReposListBy, makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
 
 import { OK_STATUS } from '../../consts'
 
@@ -206,28 +207,21 @@ describe('when the developer types on filter by and does a search', () => {
 })
 
 describe('when the developer does a search ans selects 50 row per page', () => {
-  test('must fetch a new search and display 50 resuls on the table', async () => {
+
+  test('must fetch a new search and display 50 results on the table', async () => {
     server.use(
-      rest.get('/search/repositories', (req, res, ctx) =>
-        res(
-          ctx.status(OK_STATUS),
-          ctx.json({
-            ...makeFakeResponse(),
-            items: getReposPerPage({
-              perPage: Number(req.url.searchParams.get('per_page')),
-              currentPage: Number(req.url.searchParams.get('page'))
-            }),
-          }),
-        ),
-      ),
+      rest.get('/search/repositories', handlePaginated),
     )
+
+    fireClickSearch()
 
     expect(await screen.findByRole('table')).toBeInTheDocument()
     expect(await screen.findAllByRole('row')).toHaveLength(31)
 
     fireEvent.mouseDown(screen.getByLabelText(/rows per page/i))
-    fireEvent.click(screen.getByRole('option'),{name: '50'})
-    expect(await screen.findAllByRole('row')).toHaveLength(51)
+    fireEvent.click(screen.getByRole('option'),{name: '50' })
 
-  })
+    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
+    expect(screen.findAllByRole('row')).toHaveLength(51)
+  }, 6000)
 })

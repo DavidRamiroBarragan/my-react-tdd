@@ -8,7 +8,7 @@ export const makeFakeResponse = ({ totalCount = 0 } = {}) => ({
 
 export const makeFakeRepo = ({
   id = '56757919',
-  name = 'dejango-rest-framewort-reactive'
+  name = 'dejango-rest-framework-reactive'
 } = {}) => ({
   id,
   name,
@@ -31,6 +31,7 @@ export const getReposPerPage = ({
   currentPage,
   perPage
 }) => perPage === 30 ? repos30Pagination[currentPage] : repos50paginated[currentPage]
+
 export default ({
   makeFakeResponse,
   makeFakeRepo,

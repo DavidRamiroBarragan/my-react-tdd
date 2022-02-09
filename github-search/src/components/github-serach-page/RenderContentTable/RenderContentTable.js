@@ -1,20 +1,17 @@
 import { Box, } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
-import { ContentTable } from './ContentTable'
 
-export const RenderContentTable = ({ isSearchApplied, items }) => {
-  const tableTitles = ['Repository', 'Stars', 'Forks', 'Open Issues', 'Updated at']
+export const RenderContentTable = ({ isSearchApplied, children, reposList }) => {
 
   const renderWithBox = (children) => <Box display="flex" alignItems={'center'} justifyContent="center" height={400}>
     {children}
   </Box>
 
-  if (isSearchApplied && !!items.length) {
-    return (<ContentTable tableTitles={tableTitles} items={items} onPageChange={() => {
-    }}/>)
+  if (isSearchApplied && !!reposList.length) {
+    return children
   }
-  if (isSearchApplied && !items.length) {
+  if (isSearchApplied && !reposList.length) {
     return renderWithBox(
       <Typography>Your search has no results</Typography>
     )
@@ -26,5 +23,6 @@ export const RenderContentTable = ({ isSearchApplied, items }) => {
 
 RenderContentTable.propTypes = {
   isSearchApplied: PropTypes.bool.isRequired,
-  items: PropTypes.arrayOf(PropTypes.objectOf)
+  children: PropTypes.node.isRequired,
+  reposList: PropTypes.arrayOf(PropTypes.object)
 }
