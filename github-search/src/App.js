@@ -1,4 +1,4 @@
-import GitHubSearchPage from './components/github-serach-page';
+import GitHubSearchPage from './components/github-serach-page'
 
 function App() {
   return (

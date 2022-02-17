@@ -1,4 +1,4 @@
-import {GitHubSearchPage} from './github-serach-page';
+import { GitHubSearchPage } from './github-serach-page'
 
 export {GitHubSearchPage}
 

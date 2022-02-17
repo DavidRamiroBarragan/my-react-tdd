@@ -114,6 +114,7 @@ describe('when the developers does a search', () => {
     expect(forks).toHaveTextContent(fakeRepo.forks_count)
     expect(openIssues).toHaveTextContent(fakeRepo.open_issues_count)
     expect(updatedAt).toHaveTextContent(fakeRepo.updated_at)
+    // eslint-disable-next-line testing-library/no-node-access
     expect(within(repository).getByText(fakeRepo.name).closest('a')).toHaveAttribute('href', fakeRepo.html_url)
     expect(avatarImg).toHaveAttribute('src', fakeRepo.owner.avatar_url)
 
@@ -122,7 +123,7 @@ describe('when the developers does a search', () => {
   it('must display the total results number of the search and the current number of results', async () => {
     fireClickSearch()
     await screen.findByRole('table')
-    expect(screen.getByText(/1-30 of 100/i)).toBeInTheDocument()
+    expect(screen.getByText(/1-30 of 8643/i)).toBeInTheDocument()
   })
 
   it('results size per page select/combobox with the options: 30,50,100. The default is 30', async () => {
@@ -159,11 +160,7 @@ describe('when the developer does a search without results', () => {
 
     fireClickSearch()
 
-    await waitFor(() =>
-      expect(
-        screen.getByText(/your search has no results/i),
-      ).toBeInTheDocument(),
-    )
+    await screen.findByText(/your search has no results/i)
 
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
@@ -210,7 +207,7 @@ describe('when the developer types on filter by and does a search', () => {
 
 describe('when the developer does a search ans selects 50 row per page', () => {
 
-  it.skip('must fetch a new search and display 50 results on the table', async () => {
+  it('must fetch a new search and display 50 results on the table', async () => {
     server.use(
       rest.get('/search/repositories', handlePaginated),
     )
@@ -228,10 +225,34 @@ describe('when the developer does a search ans selects 50 row per page', () => {
     fireEvent.click(options[1])
 
     await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
-    expect(screen.findAllByRole('row')).toHaveLength(51)
-  }, 6000)
+    expect(await screen.findAllByRole('row')).toHaveLength(51)
+  }, 10000)
 })
 
 describe('when the developer clicks on the search and then on next page button', function () {
+  it('must display the next repository page', async () =>{
+    server.use(
+      rest.get('/search/repositories', handlePaginated),
+    )
+
+    fireClickSearch()
+
+    expect(await screen.findByRole('table')).toBeInTheDocument()
+
+    expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
+    expect(screen.getByRole('button', {name: /next page/i} )).not.toBeDisabled()
+    fireEvent.click(screen.getByRole('button', {name: /next page/i} ))
+    expect(screen.getByRole('button', {name: /search/i})).toBeDisabled()
+
+    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
+
+    expect(screen.getByRole('cell', {name: /2-0/})).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', {name: /previous page/i} ))
+
+    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
+
+    expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
+  },10000)
   
 })
