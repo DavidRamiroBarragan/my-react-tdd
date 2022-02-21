@@ -1,12 +1,11 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-import { handlePaginated } from '../../__fixtures__/handlers'
 import { getReposListBy, makeFakeRepo, makeFakeResponse } from '../../__fixtures__/repos'
+import { GitHubSearchPage } from './github-serach-page'
 
 import { OK_STATUS } from '../../consts'
 
-import { GitHubSearchPage } from './github-serach-page'
 
 let searchButton
 const fakeResponse = makeFakeResponse({ totalCount: 8643 })
@@ -59,7 +58,7 @@ describe('when the developers does a search', () => {
   it('the search button should be disabled until the search is done', async () => {
 
     expect(searchButton).not.toBeDisabled()
-    fireEvent.change(screen.getByLabelText(/filter by/i), {target: { value: 'test'}})
+    fireEvent.change(screen.getByLabelText(/filter by/i), { target: { value: 'test' } })
     expect(searchButton).not.toBeDisabled()
     fireClickSearch()
 
@@ -203,56 +202,4 @@ describe('when the developer types on filter by and does a search', () => {
 
     expect(repository).toHaveTextContent(expectedRepo.name)
   }, 3000)
-})
-
-describe('when the developer does a search ans selects 50 row per page', () => {
-
-  it('must fetch a new search and display 50 results on the table', async () => {
-    server.use(
-      rest.get('/search/repositories', handlePaginated),
-    )
-
-    fireClickSearch()
-
-    expect(await screen.findByRole('table')).toBeInTheDocument()
-    expect(await screen.findAllByRole('row')).toHaveLength(31)
-
-    fireEvent.mouseDown(screen.getByLabelText(/rows per page/i))
-    const listbox = screen.getByRole('listbox', { name: /rows per page/i })
-
-    const options = within(listbox).getAllByRole('option')
-
-    fireEvent.click(options[1])
-
-    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
-    expect(await screen.findAllByRole('row')).toHaveLength(51)
-  }, 10000)
-})
-
-describe('when the developer clicks on the search and then on next page button', function () {
-  it('must display the next repository page', async () =>{
-    server.use(
-      rest.get('/search/repositories', handlePaginated),
-    )
-
-    fireClickSearch()
-
-    expect(await screen.findByRole('table')).toBeInTheDocument()
-
-    expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
-    expect(screen.getByRole('button', {name: /next page/i} )).not.toBeDisabled()
-    fireEvent.click(screen.getByRole('button', {name: /next page/i} ))
-    expect(screen.getByRole('button', {name: /search/i})).toBeDisabled()
-
-    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
-
-    expect(screen.getByRole('cell', {name: /2-0/})).toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', {name: /previous page/i} ))
-
-    await waitFor(()=> expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(), {timeout: 3000})
-
-    expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
-  },10000)
-  
 })
