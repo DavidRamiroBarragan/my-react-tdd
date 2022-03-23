@@ -43,3 +43,14 @@ describe('LoginPage', () => {
     expect(screen.queryByText(/the email is required/i)).not.toBeInTheDocument();
   });
 });
+
+describe("When the user fills and blur the email input with invalid email", () =>{
+  test("must display a validation message 'The email is invalid. Example: john.doe@email.com'", () => {
+    render(<LoginPage />);
+    const email = screen.getByLabelText(/email/i);
+    fireEvent.change(email, {target: {value: 'invalid.email'}})
+    fireEvent.blur(email)
+
+    expect(screen.getByText(/The email is invalid. Example: john.doe@email.com/)).toBeInTheDocument()
+  })
+})
