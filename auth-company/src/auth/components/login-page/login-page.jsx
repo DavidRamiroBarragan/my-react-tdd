@@ -1,23 +1,21 @@
-import { Button, TextField } from '@mui/material'
+import { Button, CircularProgress, TextField } from '@mui/material'
 import { useState } from 'react'
 import { validateEmail } from '../../../utils/validators'
+import { login } from '../../services'
+import { validateForm } from './utils/login-page.utils'
 
 export const LoginPage = () => {
   const [emailValidationMessage, SetEmailValidationMessage]       = useState('')
   const [passwordValidationMessage, SetPasswordValidationMessage] = useState('')
   const [formValues, setFormValues]                               = useState({ email: '', password: '' })
+  const [isFetching, setIsFetching]                               = useState(false)
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    const { email, password } = e.target.elements
-    
-    if (!email.value) {
-      SetEmailValidationMessage('The email is required')
-    }
-    
-    if (!password.value) {
-      SetPasswordValidationMessage('The password is required')
+    setIsFetching(true)
+    if (!validateForm(formValues, SetEmailValidationMessage, SetPasswordValidationMessage)) {
+      await login()
+      setIsFetching(false)
     }
   }
   
@@ -37,13 +35,14 @@ export const LoginPage = () => {
   
   return (<>
     <h1>Login page</h1>
+    {isFetching && <CircularProgress data-testid="loading-indicator"/>}
     <form onSubmit={handleSubmit}>
       <TextField
         label="email"
         variant="outlined"
         helperText={emailValidationMessage}
         id="email"
-        name={'email'}
+        name="email"
         value={formValues.email} onChange={handleOnChange}
         onBlur={handleBlurEmail}
       />
@@ -53,12 +52,11 @@ export const LoginPage = () => {
         type="password"
         helperText={passwordValidationMessage}
         id="password"
-        name={'password'}
+        name="password"
         value={formValues.password}
         onChange={handleOnChange}
       />
-      />
-      <Button variant="outlined" type="submit">
+      <Button variant="outlined" type="submit" disabled={isFetching}>
         Send
       </Button>
     </form>
