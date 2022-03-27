@@ -3,25 +3,38 @@ import { useState } from 'react'
 import { validateEmail } from '../../../utils/validators'
 import { login } from '../../services'
 import { validateForm } from './utils/login-page.utils'
+import Snackbar from '@mui/material/Snackbar'
 
 export const LoginPage = () => {
   const [emailValidationMessage, SetEmailValidationMessage]       = useState('')
   const [passwordValidationMessage, SetPasswordValidationMessage] = useState('')
   const [formValues, setFormValues]                               = useState({ email: '', password: '' })
   const [isFetching, setIsFetching]                               = useState(false)
+  const [snackbarError, setSnackbarError]                         = useState({ opened: false, message: '' })
   
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsFetching(true)
     if (!validateForm(formValues, SetEmailValidationMessage, SetPasswordValidationMessage)) {
-      await login()
-      setIsFetching(false)
+      try {
+        setIsFetching(true)
+        const response = await login()
+        if (!response.ok) {
+          throw response
+        }
+      } catch (error) {
+        const data =  await error.json()
+        console.log(data)
+        setSnackbarError({ opened: true, message: data.message })
+      } finally {
+        setIsFetching(false)
+      }
     }
+    
   }
   
   const handleOnChange = ({ target: { value, name } }) => {
-    setFormValues(formValues => ({
-      ...formValues, [name]: value,
+    setFormValues(form => ({
+      ...form, [name]: value,
     }))
   }
   
@@ -31,6 +44,10 @@ export const LoginPage = () => {
       return
     }
     SetEmailValidationMessage('')
+  }
+  
+  function oncloseSnackbar () {
+    setSnackbarError({ opened: false, message: '' })
   }
   
   return (<>
@@ -60,6 +77,13 @@ export const LoginPage = () => {
         Send
       </Button>
     </form>
+    <Snackbar
+      message={snackbarError.message}
+      open={snackbarError.opened}
+      autoHideDuration={3000}
+      onClose={oncloseSnackbar}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    />
   </>)
 }
 
